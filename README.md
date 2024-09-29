@@ -43,6 +43,51 @@ sudo chmod 777 /dev/ttyACM0
 
 #### 运行ROS示例程序
 
+如果你的相机设备是海康、大恒或者大华等相机，无论是USB3.0接口或者网口接口，那么我们的SDK将自动检测相机数量然后读取图片信息并以ROS消息的格式发布出来。
+如果是其他的相机系统，由于相机时间计算较为复杂，则需要参考高级功能中**自定义相机型号**，自行编写相机读取代码以及时间计算代码。
+
+假设你的设备是海康、大恒或者大华等相机，运行程序之前请接好设备并按如下操作运行程序。
+
+克隆代码
+```shell
+git clone https://github.com/linyicheng1/Multi-Sensor-Time-Synchronisation-System.git
+```
+
+编译代码, 如果是全功能时间同步板
+```shell
+cd Demo/Demo
+mkdir build
+cd build
+cmake ..
+make -j8
+```
+
+如果是时间同步核心板
+```shell
+cd Demo/MINI_demo
+mkdir build
+cd build
+cmake ..
+make -j8
+```
+
+运行代码，如果是全功能时间同步板
+```shell
+./synchronisation_ros_node
+```
+
+运行代码，如果是时间同步核心板
+```shell
+./MINI_ros_node
+```
+
+正常运行则可以通过`rostopic list`的方法得到传感器信息
+
+![full](./assets/img6.png)
+
+进一步的可以通过`rostopic echo /imu`查看IMU数据
+
+![full](./assets/img7.png)
 
 ### 高级功能
 
