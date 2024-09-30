@@ -31,7 +31,7 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
 }
 
 int main(int argc, char** argv) {
-    // Wait 3 seconds for the camera to start up.
+    // 等待5秒
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     // ROS 初始化
     ros::init(argc, argv, "CIS");

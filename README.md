@@ -118,11 +118,11 @@ HZ25
 
 PTP同步只有在全功能时间同步板中才会启用，启动方式使用UDP协议开启数据传输即可。在代码中可以按照以下方式打开：
 ```c++
-    // 开启数据传输和UDP同步
-    auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
-    udp_manager->Start();
-    // 关闭数据传输和UDP同步 
-    udp_manager->Stop();
+ // 开启数据传输和PTP同步
+ auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
+ udp_manager->Start();
+ // 关闭数据传输和PTP同步 
+ udp_manager->Stop();
 ```
 ### 自定义相机型号
 
@@ -133,9 +133,6 @@ PTP同步只有在全功能时间同步板中才会启用，启动方式使用UD
 2. 在头文件中定义一个类，例如`CustCamManger`，定义如下的接口函数
 
 ```c++
-#ifndef __CUSTOMISED_CAMERA_H__
-#define __CUSTOMISED_CAMERA_H__
-
 #pragma once
 #include <vector>
 #include <thread>
@@ -149,7 +146,7 @@ public:
     CustCamManger(const CustCamManger&) = delete;
     CustCamManger& operator=(const CustCamManger&) = delete;
 
-    // 初始化相机函数
+     // 初始化相机函数
     bool Initialization();
     // 停止相机读取线程函数
     void Stop();
@@ -171,8 +168,6 @@ private:
     // 是否正在运行标志位
     bool is_running_{false};
 };
-
-#endif //__CUSTOMISED_CAMERA_H__
 ```
 
 3. 在源文件中实现这些函数，其中关键点在于实现如下几个关键部分：
