@@ -11,10 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -O3  -Wall")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3  -Wall")
 
 # set sdk path
-set(SDK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/X86/)
-include_directories(${SDK_PATH}/include)
-link_directories(${SDK_PATH})
-
+set(SDK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/infinite_sense_core/X86)
 find_package(catkin QUIET)
 if (catkin_FOUND)
     message(STATUS "ROS found, Compiling ROS nodes")
@@ -30,13 +27,16 @@ if (catkin_FOUND)
             customised_camera.cpp
     )
     add_executable(${PROJECT_NAME}_ros_node ${SOURCE_FILES})
-
+    target_link_directories(${PROJECT_NAME}_ros_node PRIVATE
+        ${SDK_PATH}/lib
+    )
     target_link_libraries(${PROJECT_NAME}_ros_node
-            infinite_sense_core
             ${catkin_LIBRARIES}
+            infinite_sense_core
     )
     target_include_directories(${PROJECT_NAME}_ros_node PRIVATE
             ${catkin_INCLUDE_DIRS}
+            ${SDK_PATH}/include
     )
     target_compile_definitions(${PROJECT_NAME}_ros_node PUBLIC -DROS_PLATFORM)
 endif ()

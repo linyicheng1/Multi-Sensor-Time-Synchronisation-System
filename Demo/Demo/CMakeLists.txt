@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -O3  -Wall")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3  -Wall")
 
 # set sdk path
-set(SDK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/X86/)
+set(SDK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/infinite_sense_core/X86)
 include_directories(${SDK_PATH}/include)
 link_directories(${SDK_PATH})
 
