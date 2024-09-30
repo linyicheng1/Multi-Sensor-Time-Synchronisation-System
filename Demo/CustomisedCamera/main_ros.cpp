@@ -4,7 +4,7 @@
 #include <sensor_msgs/Imu.h>
 
 #include "udp_manager.h"
-#include "cam_manager.h"
+#include "customised_camera.h"
 #include "serial_manager.h"
 #include "data_manager.h"
 
@@ -39,15 +39,15 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "CIS");
     ros::NodeHandle node;
     // 串口线程初始化
-    auto serial_manager =std::make_shared<SerialManager>("/dev/ttyACM0");
-    serial_manager->Start();
+//    auto serial_manager =std::make_shared<SerialManager>("/dev/ttyACM0");
+//    serial_manager->Start();
 
     // IMU数据发布
     ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu", 1000);
 
     // 相机线程初始化
-    CamManger::GetInstance().Initialization();
-    CamManger::GetInstance().Start();
+    CustCamManger::GetInstance().Initialization();
+    CustCamManger::GetInstance().Start();
 
     // 等待相机启动
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
         loop_rate.sleep();
     }
     // 释放资源
-    serial_manager->Stop();
-    CamManger::GetInstance().Stop();
+//    serial_manager->Stop();
+    CustCamManger::GetInstance().Stop();
     return 0;
 }
