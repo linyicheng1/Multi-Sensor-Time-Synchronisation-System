@@ -92,7 +92,7 @@ make -j8
 
 ### 高级功能
 
-#### 使用网口通信同步
+#### 网口通信同步
 全功能时间同步板提供了一个百兆网口，能够更高效、更准确的进行时间同步。网口提供了更快的数据传输速度和更加稳定的通讯质量，在实现网口传输数据的同时，还额外加入精简版的PTP对时协议<https://en.wikipedia.org/wiki/Precision_Time_Protocol>，从而实现了与主机时间同步，进而传感器数据采集时间与主机时间一致。
 如果要使用网口通信功能则需要按如下步骤进行。
 
@@ -215,10 +215,13 @@ void CustCamManger::Receive(const std::string &name) const {
         img_data.camera_name = name;
         // 6. 将img_data存入DataManger
         DataManger::GetInstance().AddCamData(name, img_data);
-        std::this_thread::sleep_for(std::chrono::milliseconds{1000});
+        std::this_thread::sleep_for(std::chrono::milliseconds{10});
     }
 }
 ```
+如果手中没有相机，需要购买相机或者镜头，以及搭建自己的多相机模组，我们这里有恰好有一些建议：[这里](./assets/相机购买指南.md)。
+如果手中没有雷达，需要雷达，以及搭建自己的基于雷达的多传感器融合模组，我们这里建议选择支持PPS秒脉冲同步功能的雷达设备。
+
 ### 实拍图
 
 [//]: # (![photo]&#40;./assets/img4.png&#41;)
