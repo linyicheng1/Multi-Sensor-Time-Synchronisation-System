@@ -223,8 +223,8 @@ void CustCamManger::Receive(const std::string &name) const {
 如果手中没有雷达，需要雷达，以及搭建自己的基于雷达的多传感器融合模组，我们这里建议选择支持PPS秒脉冲同步功能的雷达设备。
 
 ### 购买链接
-【淘宝】Access denied MF3543 「多相机IMU同步板网口串口同步工业相机六轴姿态」
-点击链接直接打开 或者 淘宝搜索直接打开
+[【淘宝】Access denied MF3543 「多相机IMU同步板网口串口同步工业相机六轴姿态」
+点击链接直接打开 或者 淘宝搜索直接打开](https://item.taobao.com/item.htm?ft=t&id=832624497202)
 
 
 [//]: # (![photo]&#40;./assets/img4.png&#41;)
