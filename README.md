@@ -1,5 +1,5 @@
 # Multi-Sensor Time Synchronisation System
-
+# 多传感器时间同步系统
 ![title](./assets/img1.png)
 
 ## 简介
