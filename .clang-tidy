@@ -1,0 +1,62 @@
+Checks: 'readability-identifier-naming'
+CheckOptions:
+  # ------------------- 变量命名规则
+  # 变量小写
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  # 全局常量驼峰，加前缀‘k’
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.GlobalConstantPrefix
+    value: k
+  # 局部常量驼峰，加前缀‘k’
+  - key: readability-identifier-naming.LocalConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.LocalConstantPrefix
+    value: k
+  # 类静态常量驼峰，加前缀‘k’
+  - key: readability-identifier-naming.ClassConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.ClassConstantPrefix
+    value: k
+  # 枚举常量驼峰，加前缀‘k’
+  - key: readability-identifier-naming.EnumConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumConstantPrefix
+    value: k
+  # 成员变量小写
+  - key: readability-identifier-naming.MemberCase
+    value: lower_case
+  # 私有成员变量小写
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: lower_case
+  # 私有成员变量小写，后缀加‘_’
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: _
+
+  # ------------------- 类型，函数命名规则
+  # 类名称驼峰
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  # 结构体名称驼峰
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  # 枚举类型名称驼峰
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  # 函数名称驼峰
+  - key: readability-identifier-naming.FunctionCase
+    value: CamelCase
+  # 宏名称全大写
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+  # 命名空间小写
+  - key: readability-identifier-naming.NamespaceCase
+    value: lower_case
+
+  # ------------------ 命名空间规则
+  # llvmlibc-implementation-in-namespace
+
+  # ------------------- 其他规则
+  # google-explicit-constructor 隐式类型转换
+  # modernize-use-override 检查到final或overrider修饰的函数是否有virtual修饰
