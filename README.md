@@ -31,8 +31,8 @@
 
 ### 烧入固件
 
-在Firmware文件夹下，有mini_xx.uf2文件和full_xx.uf2文件，分别对应最小功能固件和全功能固件。
-将对应的uf2文件下载，然后将板子连接通过Type-C线连接到电脑上，按住板子上的BOOT按键，然后按一下RESET按键，然后松开BOOT按键，这时候板子会进入BOOT模式，弹出一个虚拟U盘。
+在firmware文件夹下，有mini_xx.uf2文件和full_xx.uf2文件，分别对应最小功能固件和全功能固件。
+将对应uf2文件下载，然后将板子连接通过Type-C连接到电脑上，按住板子上的BOOT按键，然后按一下RESET按键，然后松开BOOT按键，这时候板子会进入BOOT模式，弹出一个虚拟U盘。
 然后将uf2文件拖到板子的U盘中，等待固件烧入完成。
 
 ### 运行程序
@@ -58,7 +58,7 @@ git clone https://github.com/linyicheng1/Multi-Sensor-Time-Synchronisation-Syste
 
 编译代码, 如果是全功能时间同步板
 ```shell
-cd Demo/Demo
+cd demo/udp_demo
 mkdir build
 cd build
 cmake ..
@@ -67,7 +67,7 @@ make -j8
 
 如果是时间同步核心板
 ```shell
-cd Demo/MINI_demo
+cd demo/uart_demo
 mkdir build
 cd build
 cmake ..
@@ -76,12 +76,12 @@ make -j8
 
 运行代码，如果是全功能时间同步板
 ```shell
-./synchronisation_ros_node
+./udp_demo_ros_node
 ```
 
 运行代码，如果是时间同步核心板
 ```shell
-./MINI_ros_node
+./uart_demo_ros_node
 ```
 
 正常运行则可以通过`rostopic list`的方法得到传感器信息
