@@ -30,12 +30,14 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
 
     pub.publish(imu_msg_data);
 }
-
+void SigIntHandler(int sig) {
+  ros::shutdown();  // 让ROS节点安全退出
+}
 int main(int argc, char** argv) {
     // Wait 5 seconds for the camera to start up.
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     // ROS 初始化
-    ros::init(argc, argv, "CIS");
+    ros::init(argc, argv, "CIS",ros::init_options::NoSigintHandler);
     ros::NodeHandle node;
     // 串口线程初始化
     auto serial_manager =std::make_shared<SerialManager>("/dev/ttyACM0");
@@ -67,7 +69,7 @@ int main(int argc, char** argv) {
 
     while (node.ok()) {
         // 获取IMU数据
-        if (DataManger::GetInstance().GetNewImuData(imudata)) {
+        while (DataManger::GetInstance().GetNewImuData(imudata)) {
             // 发布IMU数据
             PublishIMUData(imu_pub, imudata);
         }
@@ -75,7 +77,7 @@ int main(int argc, char** argv) {
         ImgData img_data{};
         for (auto& cam : all_cam_names) {
             // 获取图像数据
-            if (DataManger::GetInstance().GetNewCamData(cam, img_data)) {
+            while (DataManger::GetInstance().GetNewCamData(cam, img_data)) {
                 // 发布图像数据
                 sensor_msgs::ImagePtr msg =
                         cv_bridge::CvImage(std_msgs::Header(), "mono8", img_data.image.clone()).toImageMsg();

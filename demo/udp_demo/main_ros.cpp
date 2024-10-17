@@ -36,13 +36,14 @@ void SigIntHandler(int sig) {
 int main(int argc, char** argv) {
     ros::init(argc, argv, "CIS",ros::init_options::NoSigintHandler);
     ros::NodeHandle node;
-
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
     udp_manager->Start();
 
     ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu", 1000);
     CamManger::GetInstance().Initialization();
     CamManger::GetInstance().Start();
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     image_transport::ImageTransport it(node);
     std::vector<std::string> all_cam_names;
     DataManger::GetInstance().GetAllCamNames(all_cam_names);

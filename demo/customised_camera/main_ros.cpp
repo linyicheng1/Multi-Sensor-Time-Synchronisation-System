@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     // 等待5秒
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     // ROS 初始化
-    ros::init(argc, argv, "CIS");
+    ros::init(argc, argv, "CIS",ros::init_options::NoSigintHandler);
     ros::NodeHandle node;
 
     // IMU数据发布
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 
     while (node.ok()) {
         // 获取IMU数据
-        if (DataManger::GetInstance().GetNewImuData(imudata)) {
+        while (DataManger::GetInstance().GetNewImuData(imudata)) {
             // 发布IMU数据
             PublishIMUData(imu_pub, imudata);
         }
