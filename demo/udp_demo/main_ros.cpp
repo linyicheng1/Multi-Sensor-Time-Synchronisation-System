@@ -30,11 +30,11 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
 
     pub.publish(imu_msg_data);
 }
-
+void SigIntHandler(int sig) {
+  ros::shutdown();  // 让ROS节点安全退出
+}
 int main(int argc, char** argv) {
-    // Wait 5 seconds for the camera to start up.
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-    ros::init(argc, argv, "CIS");
+    ros::init(argc, argv, "CIS",ros::init_options::NoSigintHandler);
     ros::NodeHandle node;
 
     auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
@@ -43,9 +43,6 @@ int main(int argc, char** argv) {
     ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu", 1000);
     CamManger::GetInstance().Initialization();
     CamManger::GetInstance().Start();
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-
     image_transport::ImageTransport it(node);
     std::vector<std::string> all_cam_names;
     DataManger::GetInstance().GetAllCamNames(all_cam_names);
@@ -57,18 +54,19 @@ int main(int argc, char** argv) {
     ros::Rate loop_rate(1000);
     ImuData imudata{};
     while (node.ok()) {
-        if (DataManger::GetInstance().GetNewImuData(imudata)) {
+        while (DataManger::GetInstance().GetNewImuData(imudata)) {
             PublishIMUData(imu_pub, imudata);
         }
         ImgData img_data{};
         for (auto& cam : all_cam_names) {
-            if (DataManger::GetInstance().GetNewCamData(cam, img_data)) {
+            while (DataManger::GetInstance().GetNewCamData(cam, img_data)) {
                 sensor_msgs::ImagePtr msg =
                         cv_bridge::CvImage(std_msgs::Header(), "mono8", img_data.image.clone()).toImageMsg();
                 msg->header.stamp = CreateRosTimestamp(img_data.time_stamp_us);
                 pub_list[cam].publish(msg);
             }
         }
+        ros::spinOnce();  // 确保处理ROS回调
         loop_rate.sleep();
     }
     udp_manager->Stop();
