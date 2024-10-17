@@ -27,11 +27,13 @@ if (catkin_FOUND)
   )
   add_executable(${PROJECT_NAME}_ros_node ${SOURCE_FILES})
   target_link_directories(${PROJECT_NAME}_ros_node PRIVATE
-      ${SDK_PATH}/lib
+      BEFORE ${SDK_PATH}/lib
   )
   target_link_libraries(${PROJECT_NAME}_ros_node
+      MvCameraControl
       infinite_sense_core
       ${catkin_LIBRARIES}
+
   )
   target_include_directories(${PROJECT_NAME}_ros_node PRIVATE
       ${catkin_INCLUDE_DIRS}
