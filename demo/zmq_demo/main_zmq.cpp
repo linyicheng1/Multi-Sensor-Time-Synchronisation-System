@@ -1,0 +1,85 @@
+#include <thread>
+
+#include <opencv2/core.hpp>
+#include <opencv2/opencv.hpp>
+
+#include "udp_manager.h"
+#include "cam_manager.h"
+#include "data_manager.h"
+
+#include "mvt_msg_imu.pb.h"
+#include "mvt_msg_image.pb.h"
+
+#include "zmq.hpp"
+
+void Pub(zmq::socket_t *pub, const std::string &topic, const std::string &metadata) {
+  zmq::message_t topic_msg(topic.size());
+  memcpy(topic_msg.data(), topic.c_str(), topic.size());
+  pub->send(topic_msg, zmq::send_flags::sndmore);  // Send the topic firs
+
+  zmq::message_t query(metadata.length());
+  memcpy(query.data(), metadata.c_str(), metadata.size());
+  pub->send(query, zmq::send_flags::dontwait);
+}
+
+int main() {
+  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  zmq::context_t ctx(10);
+  zmq::socket_t skt(ctx, ZMQ_PUB);
+  skt.bind("tcp://127.0.0.1:5555");
+  auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
+  udp_manager->Start();
+  CamManger::GetInstance().Initialization();
+  CamManger::GetInstance().Start();
+  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  std::vector<std::string> all_cam_names;
+  DataManger::GetInstance().GetAllCamNames(all_cam_names);
+  std::cout << "Number of cameras detected " << all_cam_names.size() << std::endl;
+  ImuData imu_data{};
+  while (skt.connected()) {
+    while (DataManger::GetInstance().GetNewImuData(imu_data)) {
+      auto imu = std::make_shared<mvt::protocol::Imu>();
+      imu->mutable_header()->set_stamp(imu_data.time_stamp_us * 1000);
+      imu->mutable_header()->set_sensor_name("imu");
+      imu->add_angular_velocity(imu_data.gx);
+      imu->add_angular_velocity(imu_data.gy);
+      imu->add_angular_velocity(imu_data.gz);
+
+      imu->add_linear_acceleration(imu_data.ax);
+      imu->add_linear_acceleration(imu_data.ay);
+      imu->add_linear_acceleration(imu_data.az);
+      auto serialized_msg = imu->SerializeAsString();
+      Pub(&skt, "imu", serialized_msg);
+    }
+    mvt::protocol::Image image;
+    ImgData image_data{};
+    for (auto &cam : all_cam_names) {
+      while (DataManger::GetInstance().GetNewCamData(cam, image_data)) {
+        if (image_data.image.empty()) {
+          continue;
+        }
+        image.mutable_header()->set_stamp(image_data.time_stamp_us * 1000);
+        image.mutable_header()->set_sensor_name(cam);
+        image.set_name(cam);
+        mvt::protocol::Mat mat;
+        mat.set_rows(image_data.image.rows);
+        mat.set_cols(image_data.image.cols);
+        mat.set_channels(image_data.image.channels());
+        mat.set_elt_type(image_data.image.type());
+        mat.set_elt_size((int)image_data.image.elemSize());
+        size_t data_size = image_data.image.rows * image_data.image.cols * image_data.image.elemSize();
+        mat.set_data(image_data.image.data, data_size);
+        image.set_name(image_data.camera_name);
+        image.mutable_mat()->MergeFrom(mat);
+        std::string serialized_msg = image.SerializeAsString();
+        Pub(&skt, "image", serialized_msg);
+      }
+    }
+    cv::waitKey(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds{1});
+  }
+  udp_manager->Stop();
+  CamManger::GetInstance().Stop();
+  skt.close();
+  return 0;
+}

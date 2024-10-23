@@ -1,0 +1,10 @@
+syntax = "proto3";
+package mvt.protocol;
+
+message DataHeader {
+  int64 stamp = 1; // 传感器时间，单位ns
+  uint32 seq = 2;
+  string frame_id = 3;
+  string sensor_name = 4;
+  int64 time = 5;  // 计数器时间，单位ns
+}
