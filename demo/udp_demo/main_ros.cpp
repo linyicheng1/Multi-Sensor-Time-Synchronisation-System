@@ -6,7 +6,9 @@
 #include "udp_manager.h"
 #include "cam_manager.h"
 #include "data_manager.h"
+#include "Fusion.h"
 
+FusionAhrs ahrs;
 inline ros::Time CreateRosTimestamp(const uint64_t timestamp_micoseconds) {
     static constexpr uint32_t kNanosecondsPerSecond = 1e9;
     const auto kTimestampU64 = timestamp_micoseconds * 1000;
@@ -16,19 +18,28 @@ inline ros::Time CreateRosTimestamp(const uint64_t timestamp_micoseconds) {
 }
 
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
-    sensor_msgs::Imu imu_msg_data;
-    imu_msg_data.header.frame_id = "/base_imu_link";
-    imu_msg_data.header.stamp = CreateRosTimestamp(imudata.time_stamp_us);
+  FusionVector gyroscope = {imudata.gx, imudata.gy, imudata.gz};
+  FusionVector accelerometer = {imudata.ax, imudata.ay, imudata.az};
+  FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.0025f);
+  FusionQuaternion q = FusionAhrsGetQuaternion(&ahrs);
 
-    imu_msg_data.angular_velocity.x = imudata.gx;
-    imu_msg_data.angular_velocity.y = imudata.gy;
-    imu_msg_data.angular_velocity.z = imudata.gz;
+  sensor_msgs::Imu imu_msg_data;
+  imu_msg_data.header.frame_id = "/base_imu_link";
+  imu_msg_data.header.stamp = CreateRosTimestamp(imudata.time_stamp_us);
 
-    imu_msg_data.linear_acceleration.x = imudata.ax;
-    imu_msg_data.linear_acceleration.y = imudata.ay;
-    imu_msg_data.linear_acceleration.z = imudata.az;
+  imu_msg_data.angular_velocity.x = imudata.gx;
+  imu_msg_data.angular_velocity.y = imudata.gy;
+  imu_msg_data.angular_velocity.z = imudata.gz;
 
-    pub.publish(imu_msg_data);
+  imu_msg_data.linear_acceleration.x = imudata.ax;
+  imu_msg_data.linear_acceleration.y = imudata.ay;
+  imu_msg_data.linear_acceleration.z = imudata.az;
+
+  imu_msg_data.orientation.w = q.array[0];
+  imu_msg_data.orientation.x = q.array[1];
+  imu_msg_data.orientation.y = q.array[2];
+  imu_msg_data.orientation.z = q.array[3];
+  pub.publish(imu_msg_data);
 }
 void SigIntHandler(int sig) {
   ros::shutdown();  // 让ROS节点安全退出

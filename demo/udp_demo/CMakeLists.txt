@@ -31,6 +31,7 @@ if (catkin_FOUND)
   )
   target_link_libraries(${PROJECT_NAME}_ros_node
       MvCameraControl
+      fusion
       infinite_sense_core
       ${catkin_LIBRARIES}
 
