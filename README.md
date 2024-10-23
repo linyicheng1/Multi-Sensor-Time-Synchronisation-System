@@ -140,7 +140,7 @@ PTP同步只有在全功能时间同步板中才会启用，启动方式使用UD
  udp_manager->Stop();
 ```
 ### 姿态解算
-时间同步板搭载了最新推出的[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现，我们参考了[Fusion ]([[./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/)](https://github.com/xioTechnologies/Fusion))的实现。
+时间同步板搭载了最新推出的[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现。
 ```c++
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
   FusionVector gyroscope = {imudata.gx, imudata.gy, imudata.gz};
@@ -157,6 +157,7 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
   pub.publish(imu_msg_data);
 }
 ```
+![full](./assets/angle.png)
 ## 自定义相机型号
 
 如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编程，如果需要我们协助支持，请私信或者提出相关的issue。在`demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
