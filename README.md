@@ -144,7 +144,7 @@ PTP同步只有在全功能时间同步板中才会启用，启动方式使用UD
  udp_manager->Stop();
 ```
 ### 启动姿态计算
-时间同步板搭载了最新推出的IMU[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现，我们参考了[Fusion ]([[./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/)](https://github.com/xioTechnologies/Fusion))的实现。
+时间同步板搭载了最新推出的[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现，我们参考了[Fusion ]([[./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/)](https://github.com/xioTechnologies/Fusion))的实现。
 ```c++
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
   FusionVector gyroscope = {imudata.gx, imudata.gy, imudata.gz};
