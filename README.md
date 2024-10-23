@@ -112,7 +112,7 @@ make -j8
 ## 高级功能
 
 ### 网口通信同步
-全功能时间同步板提供了一个百兆网口，能够更高效、更准确的进行时间同步。网口提供了更快的数据传输速度和更加稳定的通讯质量，在实现网口传输数据的同时，还额外加入精简版的PTP对时协议<https://en.wikipedia.org/wiki/Precision_Time_Protocol>，从而实现了与主机时间同步，进而传感器数据采集时间与主机时间一致。
+全功能时间同步板提供了一个百兆网口，能够更高效、更准确的进行时间同步。网口提供了更快的数据传输速度和更加稳定的通讯质量，在实现网口传输数据的同时，还额外加入精简版的[PTP对时协议](https://en.wikipedia.org/wiki/Precision_Time_Protocol)，从而实现了与主机时间同步，进而传感器数据采集时间与主机时间一致。
 如果要使用网口通信功能则需要按如下步骤进行。
 
 ### 参数配置
@@ -163,7 +163,7 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
 ```
 ## 自定义相机型号
 
-如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编成，如果需要我们协助支持，请提issue。在`demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
+如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编程，如果需要我们协助支持，请私信或者提出相关的issue。在`demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
 这里简单介绍一下开发步骤：
 
 1. 新建头文件和源文件，例如 `customised_camera.h` 和 `customised_camera.cpp`。
