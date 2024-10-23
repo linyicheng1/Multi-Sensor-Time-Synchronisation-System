@@ -13,7 +13,7 @@
 你依旧需要一些关于时间同步的基础知识，才能够更好的使用这个系统。
 幸运的是，我们将必要的相关知识整理到了[这里](./assets/时间同步原理.md)。
 
-针对不同平台的用户提供基于ROS或ZMQ例程，也提供针对ARM,X86环境的支持。
+针对不同平台的用户提供基于ROS或ZMQ例程，也提供ARM,X86环境的支持。
 
 ### 硬件准备
 
@@ -143,9 +143,27 @@ PTP同步只有在全功能时间同步板中才会启用，启动方式使用UD
  // 关闭数据传输和PTP同步 
  udp_manager->Stop();
 ```
+### 启动姿态计算
+时间同步板搭载了最新推出的IMU[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现，我们参考了[Fusion ]([[./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/)](https://github.com/xioTechnologies/Fusion))的实现。
+```c++
+void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
+  FusionVector gyroscope = {imudata.gx, imudata.gy, imudata.gz};
+  FusionVector accelerometer = {imudata.ax, imudata.ay, imudata.az};
+  FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.0025f);
+  FusionQuaternion q = FusionAhrsGetQuaternion(&ahrs);
+
+  sensor_msgs::Imu imu_msg_data;
+  ...
+  imu_msg_data.orientation.w = q.array[0];
+  imu_msg_data.orientation.x = q.array[1];
+  imu_msg_data.orientation.y = q.array[2];
+  imu_msg_data.orientation.z = q.array[3];
+  pub.publish(imu_msg_data);
+}
+```
 ## 自定义相机型号
 
-如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编成，如果需要我们协助支持，请提issue。在`Demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
+如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编成，如果需要我们协助支持，请提issue。在`demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
 这里简单介绍一下开发步骤：
 
 1. 新建头文件和源文件，例如 `customised_camera.h` 和 `customised_camera.cpp`。
