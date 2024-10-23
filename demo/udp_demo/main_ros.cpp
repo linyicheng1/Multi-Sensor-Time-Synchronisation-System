@@ -9,6 +9,7 @@
 #include "Fusion.h"
 
 FusionAhrs ahrs;
+
 inline ros::Time CreateRosTimestamp(const uint64_t timestamp_micoseconds) {
     static constexpr uint32_t kNanosecondsPerSecond = 1e9;
     const auto kTimestampU64 = timestamp_micoseconds * 1000;
@@ -18,6 +19,7 @@ inline ros::Time CreateRosTimestamp(const uint64_t timestamp_micoseconds) {
 }
 
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
+
   FusionVector gyroscope = {imudata.gx, imudata.gy, imudata.gz};
   FusionVector accelerometer = {imudata.ax, imudata.ay, imudata.az};
   FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.0025f);
@@ -39,6 +41,7 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
   imu_msg_data.orientation.x = q.array[1];
   imu_msg_data.orientation.y = q.array[2];
   imu_msg_data.orientation.z = q.array[3];
+
   pub.publish(imu_msg_data);
 }
 void SigIntHandler(int sig) {
@@ -47,6 +50,7 @@ void SigIntHandler(int sig) {
 int main(int argc, char** argv) {
     ros::init(argc, argv, "CIS",ros::init_options::NoSigintHandler);
     ros::NodeHandle node;
+    FusionAhrsInitialise(&ahrs);
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
     udp_manager->Start();
