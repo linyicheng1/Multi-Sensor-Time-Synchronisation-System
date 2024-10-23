@@ -25,8 +25,8 @@ void Pub(zmq::socket_t *pub, const std::string &topic, const std::string &metada
 int main() {
   std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   zmq::context_t ctx(10);
-  zmq::socket_t skt(ctx, ZMQ_PUB);
-  skt.bind("tcp://127.0.0.1:5555");
+  zmq::socket_t zmq_publisher(ctx, ZMQ_PUB);
+  zmq_publisher.bind("tcp://127.0.0.1:5555");
   auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
   udp_manager->Start();
   CamManger::GetInstance().Initialization();
@@ -36,7 +36,7 @@ int main() {
   DataManger::GetInstance().GetAllCamNames(all_cam_names);
   std::cout << "Number of cameras detected " << all_cam_names.size() << std::endl;
   ImuData imu_data{};
-  while (skt.connected()) {
+  while (zmq_publisher.connected()) {
     while (DataManger::GetInstance().GetNewImuData(imu_data)) {
       auto imu = std::make_shared<mvt::protocol::Imu>();
       imu->mutable_header()->set_stamp(imu_data.time_stamp_us * 1000);
@@ -49,7 +49,7 @@ int main() {
       imu->add_linear_acceleration(imu_data.ay);
       imu->add_linear_acceleration(imu_data.az);
       auto serialized_msg = imu->SerializeAsString();
-      Pub(&skt, "imu", serialized_msg);
+      Pub(&zmq_publisher, "imu", serialized_msg);
     }
     mvt::protocol::Image image;
     ImgData image_data{};
@@ -72,14 +72,13 @@ int main() {
         image.set_name(image_data.camera_name);
         image.mutable_mat()->MergeFrom(mat);
         std::string serialized_msg = image.SerializeAsString();
-        Pub(&skt, "image", serialized_msg);
+        Pub(&zmq_publisher, "image", serialized_msg);
       }
     }
-    cv::waitKey(1);
     std::this_thread::sleep_for(std::chrono::milliseconds{1});
   }
   udp_manager->Stop();
   CamManger::GetInstance().Stop();
-  skt.close();
+  zmq_publisher.close();
   return 0;
 }
