@@ -44,7 +44,7 @@
 sudo chmod 777 /dev/ttyACM0
 ```
 
-#### 运行ROS示例程序
+#### ROS示例程序
 
 如果您的相机设备是**海康**、**大恒**,**大华**等相机，无论是USB3.0接口或者网口接口，那么我们的SDK将自动检测相机数量然后读取图片信息并以ROS消息的格式发布出来。
 如果是其他的相机系统，由于相机时间计算较为复杂，则需要参考高级功能中**自定义相机型号**，自行编写相机读取代码以及时间计算代码。
@@ -88,7 +88,7 @@ make -j8
 
 ![full](./assets/d_img_7.png)
 
-#### 运行ZMQ示例程序
+#### ZMQ示例程序
 
 与ROS程序相同，ZMQ示例程序提供了非ROS环境下数据发送方法。通过将图像消息与IMU消息进行序列化(ProtoBuf)后通过ZMQ发布。
 
@@ -139,7 +139,7 @@ PTP同步只有在全功能时间同步板中才会启用，启动方式使用UD
  // 关闭数据传输和PTP同步 
  udp_manager->Stop();
 ```
-### 启动姿态计算
+### 姿态解算
 时间同步板搭载了最新推出的[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现，我们参考了[Fusion ]([[./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/)](https://github.com/xioTechnologies/Fusion))的实现。
 ```c++
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
