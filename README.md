@@ -16,7 +16,7 @@
 | --------------| ------------------------------|--------|
 | 工业相机(网口)  | 海康/大华/大恒/京航/...          | PWM    |
 | 工业相机(USB)  | 海康/大华/大恒/京航/...          | PWM    |
-| 3D激光        | Mid360/Mid70/robosense系列/...  | PPS   |
+| 3D激光        | Mid360/Mid70/RoboSense系列/...  | PPS   |
 | RTK/GPS      | 暂无                            | NMEA   |
 | 主机(ARM/X86) | Intel/AMD/Jetson/RockChip/...  | PTP    |
 ### 硬件准备
