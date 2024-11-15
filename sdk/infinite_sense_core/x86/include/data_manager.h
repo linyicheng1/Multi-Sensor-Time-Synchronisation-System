@@ -5,10 +5,8 @@
 #include <unordered_map>
 #include <opencv2/core/mat.hpp>
 
-
 #include "readerwriterqueue.h"
 
-// 串口收到的IMU数据
 struct IMU {
   uint64_t time_stamp;
   float count;

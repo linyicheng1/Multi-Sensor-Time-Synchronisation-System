@@ -18,12 +18,12 @@ class CamManger {
   void Start();
   void Enable() { is_running_ = true; }
   void Disable() { is_running_ = false; }
-
+  void Restart();
  private:
 
   CamManger();
   ~CamManger();
-  void Receive(void* handle, const std::string&) const;
+  void Receive(void* handle, const std::string&);
   static bool PrintDeviceInfo(MV_CC_DEVICE_INFO* pstMVDevInfo);
 
   std::vector<int> rets_;

@@ -11,7 +11,7 @@ class UdpManager {
   static constexpr size_t BUF_LEN = 65540;
 
  public:
-  explicit UdpManager(std::string target_ip, uint16_t port);
+  explicit UdpManager(std::string target_ip, uint16_t port,bool use_sync_time = true);
 
   ~UdpManager();
   void Start();
@@ -22,16 +22,17 @@ class UdpManager {
 
   std::thread rx_thread_, tx_thread_;
   std::atomic<bool> udp_connected_{false};
-  unsigned short port_;
+  unsigned short port_{};
   std::string target_ip_;
   UDPSocket sock_;
-  Crc crc;
+  Crc crc_;
 
-  uint64_t T1{0};
-  uint64_t T2{0};
+  uint64_t time_t1_{0};
+  uint64_t time_t2_{0};
   bool updated_t1_t2_{false};
 
   uint64_t frame_count_{0};
 
   bool started_{false};
+  bool use_sync_time_{true};
 };
