@@ -7,7 +7,7 @@
 
 #include "readerwriterqueue.h"
 
-struct IMU {
+struct __attribute__ ((packed)) IMU {
   uint64_t time_stamp;
   float count;
   float ax;
@@ -31,8 +31,8 @@ struct ImuData {
   float tmp;
 };
 
-struct TimeStampData {
-  uint8_t head;
+struct __attribute__ ((packed))TimeStampData {
+  uint16_t head;
   uint64_t mark_1;
   uint64_t mark_2;
 };

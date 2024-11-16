@@ -7,7 +7,7 @@
 #include "practical_socket.h"
 
 class UdpManager {
-  static constexpr size_t IMU_DATA_NUM = 56;
+  static constexpr size_t IMU_DATA_NUM = 52;
   static constexpr size_t BUF_LEN = 65540;
 
  public:

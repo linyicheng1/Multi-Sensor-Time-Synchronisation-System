@@ -23,7 +23,7 @@ class CamManger {
 
   CamManger();
   ~CamManger();
-  void Receive(void* handle, const std::string&);
+  void Receive(void* handle, const std::string&) const;
   static bool PrintDeviceInfo(MV_CC_DEVICE_INFO* pstMVDevInfo);
 
   std::vector<int> rets_;
