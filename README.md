@@ -56,16 +56,20 @@ sudo chmod 777 /dev/ttyACM0
 
 克隆代码
 ```shell
+
 git clone https://github.com/linyicheng1/Multi-Sensor-Time-Synchronisation-System.git
+
 ```
 
 编译代码, 如果是**全功能**时间同步板
 ```shell
+
 cd demo/udp_demo
 mkdir build
 cd build
 cmake ..
 make -j8
+
 ```
 
 如果是时间同步**核心板**
