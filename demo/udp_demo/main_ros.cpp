@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     ros::NodeHandle node;
     FusionAhrsInitialise(&ahrs);
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-    auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
+    auto udp_manager = std::make_shared<UdpManager>("192.168.1.188", 8888);
     udp_manager->Start();
 
     ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu", 1000);
