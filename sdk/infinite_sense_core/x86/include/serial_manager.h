@@ -3,7 +3,6 @@
 #include <mutex>
 #include <thread>
 
-
 #include "serial.h"
 #include "crc.h"
 
