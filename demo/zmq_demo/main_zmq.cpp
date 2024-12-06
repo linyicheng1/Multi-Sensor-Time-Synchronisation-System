@@ -6,11 +6,9 @@
 #include "udp_manager.h"
 #include "cam_manager.h"
 #include "data_manager.h"
-
-#include "mvt_msg_imu.pb.h"
-#include "mvt_msg_image.pb.h"
-
 #include "zmq.hpp"
+#include "msg_imu.pb.h"
+#include "msg_image.pb.h"
 
 void Pub(zmq::socket_t *pub, const std::string &topic, const std::string &metadata) {
   zmq::message_t topic_msg(topic.size());
@@ -44,7 +42,7 @@ int main() {
   ImuData imu_data{};
   while (zmq_publisher.connected()) {
     while (DataManger::GetInstance().GetNewImuData(imu_data)) {
-      auto imu = std::make_shared<mvt::protocol::Imu>();
+      auto imu = std::make_shared<protocol::Imu>();
       imu->mutable_header()->set_stamp(imu_data.time_stamp_us * 1000);
       imu->mutable_header()->set_sensor_name("imu");
       imu->add_angular_velocity(imu_data.gx);
@@ -57,7 +55,7 @@ int main() {
       auto serialized_msg = imu->SerializeAsString();
       Pub(&zmq_publisher, "imu", serialized_msg);
     }
-    mvt::protocol::Image image;
+    protocol::Image image;
     ImgData image_data{};
     for (auto &cam : all_cam_names) {
       while (DataManger::GetInstance().GetNewCamData(cam, image_data)) {
@@ -67,7 +65,7 @@ int main() {
         image.mutable_header()->set_stamp(image_data.time_stamp_us * 1000);
         image.mutable_header()->set_sensor_name(cam);
         image.set_name(cam);
-        mvt::protocol::Mat mat;
+        protocol::Mat mat;
         mat.set_rows(image_data.image.rows);
         mat.set_cols(image_data.image.cols);
         mat.set_channels(image_data.image.channels());

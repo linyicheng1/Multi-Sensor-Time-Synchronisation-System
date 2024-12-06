@@ -1,6 +1,6 @@
 syntax = "proto3";
-package mvt.protocol;
-import "mvt_msg_header.proto";
+package protocol;
+import "msg_header.proto";
 
 
 message Mat {
@@ -13,7 +13,7 @@ message Mat {
 }
 
 message Image {
-  DataHeader header = 1;
+  Header header = 1;
   string name = 2;
   Mat mat = 3;
 }
