@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     serial_manager->Start();
 
     // IMU数据发布
-    ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu", 1000);
+    ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu_sync_board", 1000);
 
     // 相机线程初始化
     CamManger::GetInstance().Initialization();

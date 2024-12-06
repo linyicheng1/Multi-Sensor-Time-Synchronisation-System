@@ -99,7 +99,7 @@ make -j8
 ./uart_demo_ros_node
 ```
 
-正常运行则可以通过`rostopic list`的方法得到传感器信息，进一步的可以通过`rostopic echo /imu`查看IMU数据
+正常运行则可以通过`rostopic list`的方法得到传感器信息，进一步的可以通过`rostopic echo /imu_sync_board`查看IMU数据
 
 ![full](./assets/d_img_7.png)
 

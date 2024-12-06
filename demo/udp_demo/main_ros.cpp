@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     auto udp_manager = std::make_shared<UdpManager>("192.168.1.168", 8888);
     udp_manager->Start();
 
-    ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu_syn_board", 1000);
+    ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu_sync_board", 1000);
     CamManger::GetInstance().Initialization();
     CamManger::GetInstance().Start();
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));

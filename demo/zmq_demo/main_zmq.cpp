@@ -44,7 +44,7 @@ int main() {
     while (DataManger::GetInstance().GetNewImuData(imu_data)) {
       auto imu = std::make_shared<protocol::Imu>();
       imu->mutable_header()->set_stamp(imu_data.time_stamp_us * 1000);
-      imu->mutable_header()->set_sensor_name("imu");
+      imu->mutable_header()->set_sensor_name("imu_sync_board");
       imu->add_angular_velocity(imu_data.gx);
       imu->add_angular_velocity(imu_data.gy);
       imu->add_angular_velocity(imu_data.gz);
