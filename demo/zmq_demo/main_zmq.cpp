@@ -27,7 +27,13 @@ int main() {
   zmq::context_t ctx(10);
   zmq::socket_t zmq_publisher(ctx, ZMQ_PUB);
   zmq_publisher.bind("tcp://127.0.0.1:5555");
-  auto udp_manager = std::make_shared<UdpManager>("192.168.192.168", 8888);
+  /*
+   本机IP地址应该在192.168.1.X网段下。
+   192.168.1.168是同步板的IP地址
+   The host IP address should be in the 192.168.1.X network segment.
+   192.168.1.168 is the IP address of the synchronization board.
+ */
+  auto udp_manager = std::make_shared<UdpManager>("192.168.1.168", 8888);
   udp_manager->Start();
   CamManger::GetInstance().Initialization();
   CamManger::GetInstance().Start();

@@ -52,10 +52,16 @@ int main(int argc, char** argv) {
     ros::NodeHandle node;
     FusionAhrsInitialise(&ahrs);
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-    auto udp_manager = std::make_shared<UdpManager>("192.168.1.188", 8888);
+    /*
+      本机IP地址应该在192.168.1.X网段下。
+      192.168.1.168是同步板的IP地址
+      The host IP address should be in the 192.168.1.X network segment.
+      192.168.1.168 is the IP address of the synchronization board.
+    */
+    auto udp_manager = std::make_shared<UdpManager>("192.168.1.168", 8888);
     udp_manager->Start();
 
-    ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu", 1000);
+    ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu_syn_board", 1000);
     CamManger::GetInstance().Initialization();
     CamManger::GetInstance().Start();
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
