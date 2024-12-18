@@ -1,3 +1,7 @@
+# NOTE!!!!
+
+本项目的新地址在：[https://github.com/InfiniteSenseLab/Multi-Sensor-Time-Synchronisation-System](https://github.com/InfiniteSenseLab/Multi-Sensor-Time-Synchronisation-System) ，后续都将在新地址下更新,本地址将不再维护。
+
 # Multi-Sensor Time Synchronisation System
 # 多传感器时间同步系统
 ![title](./assets/img1.png)
